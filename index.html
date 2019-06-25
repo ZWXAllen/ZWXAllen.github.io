@@ -298,6 +298,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zwxallen.github.com/2019/06/25/ThinAndRestoreSymbol/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Allen">
+      <meta itemprop="description" content="某工厂码农">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Allen的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/06/25/ThinAndRestoreSymbol/" class="post-title-link" itemprop="url">【iOS逆向】Mach-O文件瘦身以及符号化 </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-06-25 16:50:03 / Modified: 16:57:01" itemprop="dateCreated datePublished" datetime="2019-06-25T16:50:03+08:00">2019-06-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用<strong>MonkeyDev</strong>逆向抖音的时候，发现打开<strong>MonkeyDev</strong>自带的<strong>class-dump</strong>和<strong>restore-symbol</strong>比较慢，所以决定还是自己手动操作一下，省的每次编译都要浪费时间。</p>
+<p>首先，先进入到我们的项目目录里，进入<strong>/TargetApp/Aweme.app/</strong>文件夹，找到我们的目标文件<strong>Aweme</strong>。然后对它进行瘦身，运行命令只保留<strong>arm64</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo Aweme -thin arm64 -output Aweme_arm64</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们再对<strong>Aweme_arm64</strong>文件进行符号化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore-symbol Aweme_arm64 -o Aweme_symbol</span><br></pre></td></tr></table></figure>
+
+<p>出现以下日志执行成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=========== Start =============</span><br><span class="line">Scan OC method in mach-o-file.</span><br><span class="line">2019-06-25 16:55:03.278 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _audioOutputDataBuffer</span><br><span class="line">2019-06-25 16:55:03.303 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _source</span><br><span class="line">2019-06-25 16:55:03.307 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, audioDevice</span><br><span class="line">2019-06-25 16:55:03.308 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _bCanInput</span><br><span class="line">2019-06-25 16:55:03.333 restore-symbol[88352:1499613] Warning: Parsing method types failed, setEncoder:</span><br><span class="line">2019-06-25 16:55:03.333 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _encoder</span><br><span class="line">2019-06-25 16:55:03.355 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _pendingCount</span><br><span class="line">2019-06-25 16:55:03.380 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _waitingForMountingStageOnMainQueue</span><br><span class="line">2019-06-25 16:55:03.524 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _preloader</span><br><span class="line">2019-06-25 16:55:03.535 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _uploader</span><br><span class="line">2019-06-25 16:55:03.536 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _uploader</span><br><span class="line">2019-06-25 16:55:03.693 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _decrypter</span><br></pre></td></tr></table></figure>
+
+<p>最后我们再把<strong>Aweme_symbol</strong>重命名为<strong>Aweme</strong>，大功告成！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://zwxallen.github.com/2019/06/25/CleanMyMacX-4-3-0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
