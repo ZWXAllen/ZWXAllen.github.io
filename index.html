@@ -72,6 +72,52 @@
 
     .main { flex: 1; margin-left: 260px; padding: 40px 60px; max-width: 960px; }
 
+    /* Mobile hamburger button */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      padding: 0 16px;
+      z-index: 200;
+    }
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.25s;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-title {
+      margin-left: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 90;
+    }
+
     /* Typography */
     h2 {
       font-size: 24px;
@@ -177,9 +223,58 @@
     }
 
     /* Responsive */
+    /* Scrollable table wrapper */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    .table-wrap table { margin-bottom: 0; }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+
     @media (max-width: 900px) {
-      .sidebar { display: none; }
-      .main { margin-left: 0; padding: 24px 20px; }
+      .mobile-header { display: flex; }
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        width: 280px;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.show { display: block; }
+      .main {
+        margin-left: 0;
+        padding: 72px 16px 40px;
+        max-width: 100%;
+      }
+      h2 { font-size: 20px; margin: 32px 0 12px; padding-bottom: 8px; }
+      h3 { font-size: 16px; margin: 24px 0 10px; }
+      p, li { font-size: 14px; }
+      pre {
+        padding: 12px 14px;
+        font-size: 12px;
+        margin: 0 -4px 16px;
+        border-radius: 4px;
+      }
+      code { font-size: 12px; padding: 1px 4px; }
+      table { font-size: 13px; }
+      th, td { padding: 8px 10px; }
+      .callout { padding: 12px 14px; }
+      .callout-title { font-size: 13px; }
+      .callout p { font-size: 13px; }
+      .section-divider { margin: 32px 0; }
+      .footer { margin-top: 40px; padding: 16px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .main { padding: 68px 12px 32px; }
+      h2 { font-size: 18px; }
+      pre { margin: 0 -2px 14px; }
+      table { font-size: 12px; }
+      th, td { padding: 6px 8px; }
     }
   </style>
 </head>
@@ -232,6 +327,15 @@
     <a class="nav-item" href="#golden-rules">黄金法则</a>
   </div>
 </nav>
+
+<!-- Mobile Header -->
+<header class="mobile-header">
+  <button class="hamburger" id="menuToggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="mobile-title">🦫 GitButler 指南</span>
+</header>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- Main Content -->
 <main class="main">
@@ -290,13 +394,13 @@
 <p>Workspace 是 GitButler 的主界面。左侧是分支列表，中间是当前分支的 commit 历史，右侧是文件改动预览。</p>
 
 <h3>基本布局</h3>
-<table>
+<div class="table-wrap"><div class="table-wrap"><table>
   <tr><th>区域</th><th>说明</th></tr>
   <tr><td>左侧分支栏</td><td>已应用的虚拟分支、未应用的分支、远程分支</td></tr>
   <tr><td>中间 Lane</td><td>每个虚拟分支显示为一个"车道"，里面有 commit 列表</td></tr>
   <tr><td>右侧预览</td><td>选中文件或 commit 时显示 diff</td></tr>
   <tr><td>底部状态栏</td><td>显示 uncommitted changes（未提交的改动）</td></tr>
-</table>
+</table></div></div></div>
 
 <h3>Apply / Unapply</h3>
 <ul>
@@ -489,7 +593,7 @@ cat .git/gitbutler/operations-log.toml</code></pre>
 <p>GitButler 提供完整的 CLI 工具 <code>but</code>，适合脚本和 AI Agent 使用。</p>
 
 <h3>常用命令速查</h3>
-<table>
+<div class="table-wrap"><div class="table-wrap"><table>
   <tr><th>命令</th><th>作用</th></tr>
   <tr><td><code>but setup</code></td><td>初始化仓库为 GitButler 管理模式</td></tr>
   <tr><td><code>but teardown</code></td><td>退出 GitButler 模式，恢复为标准 Git 仓库</td></tr>
@@ -515,7 +619,7 @@ cat .git/gitbutler/operations-log.toml</code></pre>
   <tr><td><code>but diff</code></td><td>查看 diff</td></tr>
   <tr><td><code>but tui</code></td><td>打开终端 TUI 界面</td></tr>
   <tr><td><code>but gui</code></td><td>打开桌面 GUI</td></tr>
-</table>
+</table></div></div></div>
 
 <h3>CLI 工作流程示例</h3>
 <pre><code># 1. 初始化（首次使用）
@@ -545,7 +649,7 @@ but teardown</code></pre>
 <p><code>but tui</code> 提供一个键盘友好的终端界面，适合无 GUI 的服务器环境或 AI Agent。</p>
 
 <h3>基本导航</h3>
-<table>
+<div class="table-wrap"><div class="table-wrap"><table>
   <tr><th>按键</th><th>作用</th></tr>
   <tr><td><code>j</code> / <code>k</code></td><td>上下移动</td></tr>
   <tr><td><code>Shift+j</code> / <code>Shift+k</code></td><td>跳到上一/下一个区块</td></tr>
@@ -566,7 +670,7 @@ but teardown</code></pre>
   <tr><td><code>Esc</code></td><td>退出当前模式</td></tr>
   <tr><td><code>:</code></td><td>命令模式（输入 <code>but</code> 命令）</td></tr>
   <tr><td><code>Ctrl+r</code></td><td>刷新 workspace 状态</td></tr>
-</table>
+</table></div></div></div>
 
 <!-- ===== GitHub 集成 ===== -->
 <h2 id="github">GitHub 集成</h2>
@@ -612,13 +716,13 @@ but teardown</code></pre>
 <!-- ===== AI 辅助 ===== -->
 <h2 id="ai">AI 辅助功能</h2>
 <h3>支持的模型提供商</h3>
-<table>
+<div class="table-wrap"><div class="table-wrap"><table>
   <tr><th>提供商</th><th>类型</th><th>费用</th></tr>
   <tr><td>OpenAI</td><td>云端 API</td><td>用自己的 key 或走 GitButler 代理（需登录）</td></tr>
   <tr><td>Anthropic</td><td>云端 API</td><td>同上</td></tr>
   <tr><td>Ollama</td><td>本地运行</td><td>免费，支持 Llama 3、Phi 3、Mistral 等开源模型</td></tr>
   <tr><td>LM Studio</td><td>本地运行</td><td>免费</td></tr>
-</table>
+</table></div></div></div>
 
 <h3>自定义 Prompt</h3>
 <p>在 Settings → AI 中可以自定义 prompt，支持以下变量：</p>
@@ -775,6 +879,18 @@ but update</code></pre>
   <p>原文链接：<a href="https://docs.gitbutler.com/" target="_blank">https://docs.gitbutler.com/</a></p>
 </div>
 
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  function openMenu() { sidebar.classList.add('open'); overlay.classList.add('show'); toggle.classList.add('active'); }
+  function closeMenu() { sidebar.classList.remove('open'); overlay.classList.remove('show'); toggle.classList.remove('active'); }
+  toggle.addEventListener('click', () => sidebar.classList.contains('open') ? closeMenu() : openMenu());
+  overlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.nav-item').forEach(a => a.addEventListener('click', closeMenu));
+  // Close on resize back to desktop
+  window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); });
+</script>
 </main>
 </div>
 </body>
