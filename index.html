@@ -231,7 +231,9 @@
       border: 1px solid var(--border);
       border-radius: 6px;
     }
-    .table-wrap table { margin-bottom: 0; }
+    .table-wrap table { margin-bottom: 0; min-width: 400px; }
+    .table-wrap::-webkit-scrollbar { height: 4px; }
+    .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     /* Smooth scroll */
     html { scroll-behavior: smooth; scroll-padding-top: 64px; }
