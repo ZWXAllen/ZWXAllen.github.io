@@ -1,864 +1,781 @@
 <!DOCTYPE html>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next pisces use-motion" lang>
-<head><meta name="generator" content="Hexo 3.9.0">
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-  
-  
-    
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Pisces',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: true,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="某工厂码农">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Allen的博客">
-<meta property="og:url" content="http://zwxallen.github.com/index.html">
-<meta property="og:site_name" content="Allen的博客">
-<meta property="og:description" content="某工厂码农">
-<meta property="og:locale" content="default">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Allen的博客">
-<meta name="twitter:description" content="某工厂码农">
-
-
-
-
-
-  
-  
-  <link rel="canonical" href="http://zwxallen.github.com/">
-
-
-
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>Allen的博客</title>
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <noscript>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitButler 中文版使用指南</title>
   <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #d29922;
+      --danger: #f85149;
+      --code-bg: #1a1f26;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
+    /* Layout */
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      padding: 20px 0;
+      z-index: 100;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .sidebar-logo {
+      padding: 0 20px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .sidebar-logo h1 { font-size: 18px; font-weight: 700; color: var(--accent); }
+    .sidebar-logo p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .nav-section { margin-bottom: 4px; }
+    .nav-section-title {
+      padding: 8px 20px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .nav-item {
+      display: block;
+      padding: 6px 20px 6px 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); text-decoration: none; }
+    .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(88,166,255,0.08); }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
+    .main { flex: 1; margin-left: 260px; padding: 40px 60px; max-width: 960px; }
+
+    /* Typography */
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 48px 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    h2:first-child { margin-top: 0; }
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 32px 0 12px;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 24px 0 8px;
+      color: var(--text-muted);
+    }
+    p { margin-bottom: 16px; }
+    ul, ol { margin-bottom: 16px; padding-left: 24px; }
+    li { margin-bottom: 6px; }
+
+    /* Code */
+    code {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      color: #ff7b72;
+    }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+    .code-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    /* Callouts */
+    .callout {
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      border-left: 3px solid;
+    }
+    .callout-info { background: rgba(88,166,255,0.08); border-color: var(--accent); }
+    .callout-warning { background: rgba(210,153,34,0.08); border-color: var(--accent3); }
+    .callout-danger { background: rgba(248,81,73,0.08); border-color: var(--danger); }
+    .callout-success { background: rgba(63,185,80,0.08); border-color: var(--accent2); }
+    .callout-title { font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+    .callout p { margin-bottom: 0; font-size: 14px; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
+    th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+    th { background: var(--surface2); font-weight: 600; }
+    tr:hover td { background: var(--surface2); }
+
+    /* Highlighted concepts */
+    .concept {
+      display: inline-block;
+      background: rgba(88,166,255,0.12);
+      border: 1px solid rgba(88,166,255,0.25);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 48px 0;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 20px; }
+    }
   </style>
-</noscript>
-
 </head>
+<body>
+<div class="layout">
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left 
-  page-home">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Allen的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">宁交一帮抬杠的鬼,不结一群嘴甜的贼</p>
-      
-    
-    
+<!-- Sidebar Navigation -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>🦫 GitButler 指南</h1>
+    <p>中文版 · 完整使用手册</p>
   </div>
 
-  <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+  <div class="nav-section">
+    <div class="nav-section-title">基础概念</div>
+    <a class="nav-item" href="#why">为什么要用 GitButler</a>
+    <a class="nav-item" href="#core-concepts">核心概念</a>
+    <a class="nav-item" href="#workspace">Workspace 工作区</a>
+    <a class="nav-item" href="#virtual-branches">虚拟分支</a>
   </div>
-</div>
 
+  <div class="nav-section">
+    <div class="nav-section-title">常用操作</div>
+    <a class="nav-item" href="#creating-branches">创建分支与提交</a>
+    <a class="nav-item" href="#editing-commits">编辑 Commit</a>
+    <a class="nav-item" href="#conflicts">冲突处理</a>
+    <a class="nav-item" href="#upstream">同步上游</a>
+    <a class="nav-item" href="#pushing">推送与 PR</a>
+    <a class="nav-item" href="#stacked">堆叠分支</a>
+  </div>
 
+  <div class="nav-section">
+    <div class="nav-section-title">高级功能</div>
+    <a class="nav-item" href="#timeline">操作历史与撤销</a>
+    <a class="nav-item" href="#recovering">恢复丢失数据</a>
+    <a class="nav-item" href="#cli">命令行工具</a>
+    <a class="nav-item" href="#tui">TUI 终端界面</a>
+  </div>
 
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home menu-item-active">
+  <div class="nav-section">
+    <div class="nav-section-title">集成</div>
+    <a class="nav-item" href="#github">GitHub 集成</a>
+    <a class="nav-item" href="#gitlab">GitLab 集成</a>
+    <a class="nav-item" href="#ai">AI 辅助</a>
+  </div>
 
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
+  <div class="nav-section">
+    <div class="nav-section-title">故障排除</div>
+    <a class="nav-item" href="#troubleshooting">常见问题</a>
+    <a class="nav-item" href="#golden-rules">黄金法则</a>
+  </div>
 </nav>
 
-
-
-  
-
-
-
-</div>
-    </header>
-
-    
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-  <section id="posts" class="posts-expand">
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zwxallen.github.com/2019/06/25/ThinAndRestoreSymbol/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Allen">
-      <meta itemprop="description" content="某工厂码农">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Allen的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/25/ThinAndRestoreSymbol/" class="post-title-link" itemprop="url">【iOS逆向】Mach-O文件瘦身以及符号化 </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-25 16:50:03 / Modified: 16:57:01" itemprop="dateCreated datePublished" datetime="2019-06-25T16:50:03+08:00">2019-06-25</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在使用<strong>MonkeyDev</strong>逆向抖音的时候，发现打开<strong>MonkeyDev</strong>自带的<strong>class-dump</strong>和<strong>restore-symbol</strong>比较慢，所以决定还是自己手动操作一下，省的每次编译都要浪费时间。</p>
-<p>首先，先进入到我们的项目目录里，进入<strong>/TargetApp/Aweme.app/</strong>文件夹，找到我们的目标文件<strong>Aweme</strong>。然后对它进行瘦身，运行命令只保留<strong>arm64</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lipo Aweme -thin arm64 -output Aweme_arm64</span><br></pre></td></tr></table></figure>
-
-<p>然后，我们再对<strong>Aweme_arm64</strong>文件进行符号化</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">restore-symbol Aweme_arm64 -o Aweme_symbol</span><br></pre></td></tr></table></figure>
-
-<p>出现以下日志执行成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">=========== Start =============</span><br><span class="line">Scan OC method in mach-o-file.</span><br><span class="line">2019-06-25 16:55:03.278 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _audioOutputDataBuffer</span><br><span class="line">2019-06-25 16:55:03.303 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _source</span><br><span class="line">2019-06-25 16:55:03.307 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, audioDevice</span><br><span class="line">2019-06-25 16:55:03.308 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _bCanInput</span><br><span class="line">2019-06-25 16:55:03.333 restore-symbol[88352:1499613] Warning: Parsing method types failed, setEncoder:</span><br><span class="line">2019-06-25 16:55:03.333 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _encoder</span><br><span class="line">2019-06-25 16:55:03.355 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _pendingCount</span><br><span class="line">2019-06-25 16:55:03.380 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _waitingForMountingStageOnMainQueue</span><br><span class="line">2019-06-25 16:55:03.524 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _preloader</span><br><span class="line">2019-06-25 16:55:03.535 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _uploader</span><br><span class="line">2019-06-25 16:55:03.536 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _uploader</span><br><span class="line">2019-06-25 16:55:03.693 restore-symbol[88352:1499613] Warning: Parsing instance variable type failed, _decrypter</span><br></pre></td></tr></table></figure>
-
-<p>最后我们再把<strong>Aweme_symbol</strong>重命名为<strong>Aweme</strong>，大功告成！</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zwxallen.github.com/2019/06/25/CleanMyMacX-4-3-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Allen">
-      <meta itemprop="description" content="某工厂码农">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Allen的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/06/25/CleanMyMacX-4-3-0/" class="post-title-link" itemprop="url">CleanMyMacX 4.3.0 TNT你好我也好版</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-06-25 15:49:37 / Modified: 15:50:25" itemprop="dateCreated datePublished" datetime="2019-06-25T15:49:37+08:00">2019-06-25</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>废话不多说，直接上地址。</p>
-<blockquote>
-<p>链接: <a href="https://pan.baidu.com/s/1PatzAAaNZj328WJ_kl9YeA" target="_blank" rel="noopener">https://pan.baidu.com/s/1PatzAAaNZj328WJ_kl9YeA</a> 提取码: riyk </p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
-
-
-          </div>
-          
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Allen">
-            
-              <p class="site-author-name" itemprop="name">Allen</p>
-              <div class="site-description motion-element" itemprop="description">某工厂码农</div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-
-
-              
-
-              
-            </nav>
-          
-
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ZWXAllen" title="GitHub &rarr; https://github.com/ZWXAllen" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="mailto:yu.zhang@foxmail.com.com" title="E-Mail &rarr; mailto:yu.zhang@foxmail.com.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-
-      
-        <div class="back-to-top">
-          <i class="fa fa-arrow-up"></i>
-          
-            <span id="scrollpercent"><span>0</span>%</span>
-          
-        </div>
-      
-
-    </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Allen</span>
-
-  
-
-  
+<!-- Main Content -->
+<main class="main">
+
+<!-- ===== 引言 ===== -->
+<h2 id="intro">🦫 GitButler 中文版使用指南</h2>
+<p>本文档基于 <a href="https://docs.gitbutler.com/" target="_blank">GitButler 官方文档</a> 整理，涵盖从入门到进阶的全部核心操作。读完本文，你将学会如何在不切分支的情况下并行开发多个功能。</p>
+
+<div class="callout callout-info">
+  <div class="callout-title">💡 一句话概括</div>
+  <p>GitButler 让你在同一工作目录下同时编辑多个分支，所有 commit 自动归属到指定虚拟分支，无需手动 checkout 切换。</p>
 </div>
 
-
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-
-    
-
-    
-
-    
-  </div>
-
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-  
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
-  
-
-  
-
-  
-
-  
-
-
-
-  
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
+<!-- ===== 为什么要用 ===== -->
+<h2 id="why">为什么要用 GitButler？</h2>
+<p>传统 Git 的问题是：你只能同时在一个分支上工作。想切换任务时，必须先 stash 当前改动、checkout 到另一个分支，然后再 pop 回来。这个过程容易出错、丢数据。</p>
+<p>GitButler 重新设计了这段流程——它是写代码和推送代码之间的桥梁，专注于你本地的工作目录：</p>
+<ul>
+  <li><strong>并行分支</strong>：同时应用多个分支，各自独立 commit</li>
+  <li><strong>拖拽式 commit 编辑</strong>：drag &amp; drop 合并、拆分、重排 commit</li>
+  <li><strong>自动冲突处理</strong>：rebase 时遇到冲突继续推进，稍后逐个解决</li>
+  <li><strong>操作历史</strong>：随时回退到任意时间点</li>
+  <li><strong>AI 辅助</strong>：自动生成 commit message 和分支名</li>
+</ul>
+
+<!-- ===== 核心概念 ===== -->
+<h2 id="core-concepts">核心概念</h2>
+
+<h3>1. Target Branch（目标分支）</h3>
+<p>GitButler 需要一个"主线"作为基准。通常是你团队的 <code>main</code> 或 <code>master</code> 分支。所有虚拟分支都以它为基础创建。</p>
+
+<h3>2. Workspace（工作区）</h3>
+<p>GitButler 的核心视图。你的所有未提交改动都在这里，同时可以挂载多个并行分支。你不需要手动切换分支，所有改动自动归属到对应的分支车道（lane）。</p>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 重要：Workspace 分支机制</div>
+  <p>GitButler 会创建一个特殊的 <code>gitbutler/workspace</code> 分支来合并所有已应用的分支。你在终端执行 <code>git status</code> 时看到的就是这个合并后的状态。</p>
+  <p><strong>不要在 GitButler 模式下直接用 <code>git commit</code> 提交</strong>——这会绕过 GitButler 的追踪系统，导致 UI 不更新。正确做法是：在 GitButler 界面中点击 "Commit" 按钮，或在对应 lane 里操作。</p>
+</div>
+
+<h3>3. Virtual Branch（虚拟分支）</h3>
+<p>虚拟分支是 GitButler 的核心创新。它们不是真正的 git 分支，而是 GitButler 自己管理的逻辑分支：
+<ul>
+  <li>可以同时 <strong>Apply</strong>（应用）多个虚拟分支到你的工作目录</li>
+  <li>每个分支有自己独立的暂存区</li>
+  <li>可以独立 commit、push</li>
+  <li>可以随时 <strong>Unapply</strong>（卸载）来暂时收起</li>
+</ul>
+</p>
+
+<h3>4. Branch Stack（分支栈）</h3>
+<p>当一个功能的实现需要多个相关分支（比如先改数据结构，再改 UI），可以把它们组成一个 stack，从底到顶依次依赖。</p>
+
+<!-- ===== Workspace ===== -->
+<h2 id="workspace">Workspace 工作区</h2>
+<p>Workspace 是 GitButler 的主界面。左侧是分支列表，中间是当前分支的 commit 历史，右侧是文件改动预览。</p>
+
+<h3>基本布局</h3>
+<table>
+  <tr><th>区域</th><th>说明</th></tr>
+  <tr><td>左侧分支栏</td><td>已应用的虚拟分支、未应用的分支、远程分支</td></tr>
+  <tr><td>中间 Lane</td><td>每个虚拟分支显示为一个"车道"，里面有 commit 列表</td></tr>
+  <tr><td>右侧预览</td><td>选中文件或 commit 时显示 diff</td></tr>
+  <tr><td>底部状态栏</td><td>显示 uncommitted changes（未提交的改动）</td></tr>
+</table>
+
+<h3>Apply / Unapply</h3>
+<ul>
+  <li><strong>Apply</strong>：把一个分支的改动放到工作目录中（同时应用多个）</li>
+  <li><strong>Unapply</strong>：从工作目录移除该分支的改动，但保留分支和 commit</li>
+</ul>
+
+<!-- ===== 虚拟分支 ===== -->
+<h2 id="virtual-branches">虚拟分支详解</h2>
+<p>虚拟分支是 GitButler 区别于普通 Git 客户端的最大特色。</p>
+
+<h3>工作原理</h3>
+<p>与普通 Git 每次只能在一个分支上不同，GitButler 把所有并行分支的改动叠加到你的工作目录。每个分支有一列（lane），每个 lane 有自己的暂存区和 commit 历史。</p>
+
+<h3>关键特性</h3>
+<ul>
+  <li><strong>拖拽分配</strong>：把一个文件的改动从一个 lane 拖到另一个 lane</li>
+  <li><strong>独立暂存</strong>：每个 lane 有自己的 staging area</li>
+  <li><strong>自动 clean</strong>：分支合并到上游后，GitButler 自动清理该虚拟分支</li>
+  <li><strong>WIP 支持</strong>：分支可以有未提交的 WIP 状态（自动保存为 WIP commit）</li>
+</ul>
+
+<!-- ===== 创建分支与提交 ===== -->
+<h2 id="creating-branches">创建分支与提交</h2>
+
+<h3>第一步：导入项目</h3>
+<ol>
+  <li>打开 GitButler Desktop</li>
+  <li>点击 <strong>"Add local project"</strong> 选择你的仓库目录</li>
+  <li>选择 <strong>Target Branch</strong>（通常是 <code>origin/main</code> 或 <code>origin/master</code>）</li>
+  <li>可选：登录 GitButler 账号以启用 AI 功能</li>
+  <li>可选：连接 GitHub/GitLab 以支持 PR/MR</li>
+</ol>
+
+<h3>第二步：创建虚拟分支并编辑文件</h3>
+<ol>
+  <li>在工作目录中编辑文件（GitButler 会自动检测到改动）</li>
+  <li>在 <strong>"Unassigned changes"</strong> 区域可以看到所有未归属的改动</li>
+  <li>点击 <strong>"Create Branch"</strong> 或直接拖拽文件到新建的 lane 中</li>
+  <li>为分支命名（比如 <code>feat/遥控语音播报</code>）</li>
+</ol>
+
+<h3>第三步：Commit</h3>
+<ol>
+  <li>在目标 lane 中点击 <strong>"Start a Commit"</strong></li>
+  <li>填写 commit message（或用 <strong>"Generate Message"</strong> 让 AI 自动生成）</li>
+  <li>点击 commit 完成</li>
+</ol>
+
+<div class="callout callout-success">
+  <div class="callout-title">✅ 正确流程总结</div>
+  <p>改文件 → GitButler 自动检测 → 拖到对应 lane → 点击 Commit → 推送。全程不需要 <code>git checkout</code> 或 <code>git stash</code>。</p>
+</div>
+
+<!-- ===== 编辑 Commit ===== -->
+<h2 id="editing-commits">编辑 Commit（拖拽式操作）</h2>
+<p>GitButler 把复杂的 rebase 操作变成了可视化拖拽：</p>
+
+<h3>Squash（合并 commit）</h3>
+<p>把一个 commit 拖到另一个 commit 上方 → 自动 squash。</p>
+
+<h3>Split（拆分 commit）</h3>
+<ol>
+  <li>在两个 commit 之间插入一个 <strong>empty commit</strong>（点击 commit 旁的 <code>+</code> 按钮）</li>
+  <li>把要拆出来的文件从原 commit 拖到新 empty commit 上</li>
+  <li>编辑新 commit 的 message</li>
+</ol>
+
+<h3>Reorder（重排顺序）</h3>
+<p>直接拖拽 commit 到新的位置，GitButler 自动 rebase 所有后续 commit。</p>
+
+<h3>Undo（撤销 commit）</h3>
+<p>展开 commit，点击 <strong>"Undo"</strong> → 该 commit 的改动变为未提交状态（不会丢失）。</p>
+
+<h3>Uncommit 单个文件</h3>
+<p>展开 commit → 点击某个文件 → 点击 <strong>"Uncommit"</strong> → 仅该文件回到未提交状态。</p>
+
+<h3>Edit Mode（编辑模式）</h3>
+<p>点击 commit 上的 <strong>"Edit commit"</strong> 按钮，GitButler 会暂存其他改动，checkout 出该 commit 让你直接编辑工作目录，完成后点击 <strong>"Save and exit"</strong> 自动 amend 并 rebase 上方 commit。</p>
+
+<h3>Absorb（吸收改动到已有 commit）</h3>
+<p>修改文件后，把文件直接拖到目标 commit 上 → 自动 absorb 并重 base。</p>
+
+<!-- ===== 冲突处理 ===== -->
+<h2 id="conflicts">冲突处理</h2>
+<p>GitButler 的冲突处理方式是：<strong>不停止 rebase</strong>，遇到冲突的 commit 标记为 <span class="concept">Conflicted</span>，继续处理后续的，等你有空再逐个解决。</p>
+
+<h3>操作流程</h3>
+<ol>
+  <li>点击 <strong>"Update"</strong> 同步上游 → GitButler 告诉你哪些分支有冲突</li>
+  <li>展开冲突的 commit → 点击 <strong>"Resolve Conflict"</strong></li>
+  <li>进入 Edit Mode，此时其他分支被暂时移除，只留下这个 commit 的冲突状态</li>
+  <li>像普通编辑一样修改文件解决冲突</li>
+  <li>点击 <strong>"Save and Exit"</strong> → GitButler 自动提交修复并重 base 后续 commit</li>
+  <li>如果不想解决，点击 <strong>"Cancel"</strong> 返回正常状态</li>
+</ol>
+
+<!-- ===== 同步上游 ===== -->
+<h2 id="upstream">同步上游（Pull / Rebase）</h2>
+<h3>常规更新</h3>
+<p>当主分支有新 commit 时，GitButler 会提示 <strong>"Update"</strong> 按钮：</p>
+<ul>
+  <li>点击 Update → 自动 rebase 所有已应用的分支到最新基线</li>
+  <li>已合并的分支会被自动清理</li>
+</ul>
+
+<h3>有人同时推送了同一分支</h3>
+<p>当别人推了你的分支时，GitButler 会显示远程的新 commit（不需要 merge）：</p>
+<ul>
+  <li><strong>Rebase upstream changes</strong>：等价于 <code>git pull --rebase</code>，把你的 commit 移到对方 commit 上方</li>
+  <li><strong>Interactive integration</strong>：交互模式，可以重排、跳过、squash 远程 commit</li>
+</ul>
+
+<!-- ===== 推送与 PR ===== -->
+<h2 id="pushing">推送与创建 PR</h2>
+<h3>Push</h3>
+<p>在 lane 上点击 <strong>"Push"</strong> 按钮即可推送该分支到远程。</p>
+
+<h3>Create Pull Request</h3>
+<p>连接 GitHub/GitLab 后，点击 <strong>"Create PR"</strong> 或 <strong>"Submit for Review"</strong> 即可在 GUI 内创建 PR，无需打开浏览器。</p>
+
+<h3>Land（直接合并到目标分支）</h3>
+<p>如果你不需要 Code Review，可以在项目设置中开启 <strong>"Land branches directly"</strong>，Push 按钮会变成 <strong>"Land"</strong>，直接快进合并到目标分支。</p>
+
+<div class="callout callout-danger">
+  <div class="callout-title">🚨 Land 的注意事项</div>
+  <p>Land 会绕过 Code Review、CI 检查和分支保护规则。受保护的分支会拒绝直接推送。</p>
+</div>
+
+<!-- ===== 堆叠分支 ===== -->
+<h2 id="stacked">堆叠分支（Stacked PRs）</h2>
+<p>当一个功能需要多个相关改动，但每个改动需要独立 review 时，使用 Stack：</p>
+
+<ol>
+  <li>在底部分支（基础分支）上 commit 第一个改动</li>
+  <li>在该 lane 上点击 <strong>"Create new branch"</strong> 的堆叠图标</li>
+  <li>命名新分支，继续 commit 第二个改动</li>
+  <li>重复直到完成所有依赖分支</li>
+</ol>
+
+<p>推送时，GitButler 会自动设置每个 PR 的 base branch 为下方最近的有 PR 的分支。</p>
+
+<h3>移动分支间关系</h3>
+<ul>
+  <li><strong>拖拽</strong>：把分支 header 拖到另一个 stack 的合适位置</li>
+  <li><strong>Tear off</strong>：把分支拖出 stack 区域，变成独立分支</li>
+</ul>
+<p>约束：分支不能有冲突、必须至少有一个 commit、不能移动到同一 stack 内。</p>
+
+<!-- ===== 操作历史 ===== -->
+<h2 id="timeline">操作历史与撤销</h2>
+<p>GitButler 在执行每个重要操作前都会创建一个快照。你可以通过 <strong>Operations History</strong>（操作历史）面板回退到任意时刻。</p>
+
+<h3>使用方式</h3>
+<ol>
+  <li>点击左侧边栏的 <strong>"History"</strong> 图标</li>
+  <li>找到你想回退的操作</li>
+  <li>点击 <strong>"Revert"</strong> 按钮</li>
+</ol>
+
+<p>支持撤销的操作包括：commit、squash、reorder、update upstream、apply/unapply 分支等。</p>
+
+<div class="callout callout-info">
+  <div class="callout-title">💡 文件快照</div>
+  <p>即使没有 commit，GitButler 也会定期快照最近修改过的文件内容。如果误删了文件，可以在 History 中恢复。</p>
+</div>
+
+<!-- ===== 恢复数据 ===== -->
+<h2 id="recovering">恢复丢失的数据</h2>
+<p>GitButler 极其注重数据安全，即使崩溃也不会丢数据：</p>
+
+<h3>虚拟分支的 git 引用</h3>
+<p>每个虚拟分支都会作为 git ref 保存在 <code>refs/gitbutler/</code> 下（不在 <code>refs/heads/</code> 里），你可以直接看到：</p>
+<pre><code>git branch -a | grep gitbutler</code></pre>
+
+<h3>从 git log 恢复</h3>
+<pre><code>git log --all --oneline | grep gitbutler</code></pre>
+<p>这些引用指向的 commit 包含了该分支的所有文件改动（包括 WIP 状态）。</p>
+
+<h3>从 Operations Log 恢复</h3>
+<pre><code># 查看 GitButler 的内部操作记录
+cat .git/gitbutler/operations-log.toml</code></pre>
+<p>里面保存了每次操作前的完整项目快照。</p>
+
+<h3>极端情况下的手动恢复</h3>
+<p>如果 GitButler 完全无法启动且需要手动恢复冲突 commit，参考官方文档的 <a href="https://docs.gitbutler.com/troubleshooting/fixing-conflicts-outside-gitbutler" target="_blank">Fixing Conflicts Outside GitButler</a> 指南，涉及 <code>.auto-resolution</code>、<code>.conflict-base-0</code> 等内部 git 对象的操作。</p>
+
+<!-- ===== CLI ===== -->
+<h2 id="cli">命令行工具（CLI）</h2>
+<p>GitButler 提供完整的 CLI 工具 <code>but</code>，适合脚本和 AI Agent 使用。</p>
+
+<h3>常用命令速查</h3>
+<table>
+  <tr><th>命令</th><th>作用</th></tr>
+  <tr><td><code>but setup</code></td><td>初始化仓库为 GitButler 管理模式</td></tr>
+  <tr><td><code>but teardown</code></td><td>退出 GitButler 模式，恢复为标准 Git 仓库</td></tr>
+  <tr><td><code>but status</code></td><td>查看 workspace 状态</td></tr>
+  <tr><td><code>but branch list</code></td><td>列出所有虚拟分支</td></tr>
+  <tr><td><code>but branch create &lt;name&gt;</code></td><td>创建虚拟分支</td></tr>
+  <tr><td><code>but commit</code></td><td>提交选定改动到当前分支</td></tr>
+  <tr><td><code>but apply &lt;branch&gt;</code></td><td>应用分支到 workspace</td></tr>
+  <tr><td><code>but unapply &lt;branch&gt;</code></td><td>从 workspace 移除分支</td></tr>
+  <tr><td><code>but push &lt;branch&gt;</code></td><td>推送分支到远程</td></tr>
+  <tr><td><code>but pull</code></td><td>拉取上游更新并更新分支</td></tr>
+  <tr><td><code>but absorb</code></td><td>将改动吸收到指定 commit</td></tr>
+  <tr><td><code>but squash</code></td><td>Squash 两个 commit</td></tr>
+  <tr><td><code>but undo</code></td><td>撤销上一步操作</td></tr>
+  <tr><td><code>but redo</code></td><td>重做被撤销的操作</td></tr>
+  <tr><td><code>but oplog</code></td><td>查看操作历史</td></tr>
+  <tr><td><code>but reword</code></td><td>修改 commit message 或分支名</td></tr>
+  <tr><td><code>but uncommit</code></td><td>把 commit 的改动放回未提交区</td></tr>
+  <tr><td><code>but resolve</code></td><td>解决冲突</td></tr>
+  <tr><td><code>but clean</code></td><td>清理空的虚拟分支</td></tr>
+  <tr><td><code>but land</code></td><td>直接合并分支到目标分支</td></tr>
+  <tr><td><code>but pr</code></td><td>创建 Pull Request</td></tr>
+  <tr><td><code>but diff</code></td><td>查看 diff</td></tr>
+  <tr><td><code>but tui</code></td><td>打开终端 TUI 界面</td></tr>
+  <tr><td><code>but gui</code></td><td>打开桌面 GUI</td></tr>
+</table>
+
+<h3>CLI 工作流程示例</h3>
+<pre><code># 1. 初始化（首次使用）
+but setup
+
+# 2. 创建并切换到新分支
+but branch create feat/my-feature
+but apply feat/my-feature
+
+# 3. 编辑文件...
+
+# 4. 提交（不指定文件则提交所有已标记的）
+but commit -m "feat: 添加新功能"
+
+# 5. 推送到远程
+but push feat/my-feature
+
+# 6. 创建 PR（需配置 forge）
+but pr --title "feat: 添加新功能" --draft
+
+# 7. 清理并退出
+but cleanup
+but teardown</code></pre>
+
+<!-- ===== TUI ===== -->
+<h2 id="tui">终端 TUI 界面</h2>
+<p><code>but tui</code> 提供一个键盘友好的终端界面，适合无 GUI 的服务器环境或 AI Agent。</p>
+
+<h3>基本导航</h3>
+<table>
+  <tr><th>按键</th><th>作用</th></tr>
+  <tr><td><code>j</code> / <code>k</code></td><td>上下移动</td></tr>
+  <tr><td><code>Shift+j</code> / <code>Shift+k</code></td><td>跳到上一/下一个区块</td></tr>
+  <tr><td><code>g</code></td><td>跳到未提交改动</td></tr>
+  <tr><td><code>Shift+g</code></td><td>跳到公共基线</td></tr>
+  <tr><td><code>t</code></td><td>打开分支选择器</td></tr>
+  <tr><td><code>d</code></td><td>打开详情面板</td></tr>
+  <tr><td><code>Space</code></td><td>标记/取消标记文件或 hunk</td></tr>
+  <tr><td><code>c</code></td><td>创建 commit</td></tr>
+  <tr><td><code>n</code></td><td>插入空 commit</td></tr>
+  <tr><td><code>b</code></td><td>创建分支</td></tr>
+  <tr><td><code>m</code></td><td>移动 commit 或分支</td></tr>
+  <tr><td><code>r</code></td><td>进入 squash 模式</td></tr>
+  <tr><td><code>x</code></td><td>丢弃选中内容</td></tr>
+  <tr><td><code>u</code> / <code>Shift+u</code></td><td>撤销 / 重做</td></tr>
+  <tr><td><code>?</code></td><td>显示完整快捷键列表</td></tr>
+  <tr><td><code>q</code></td><td>退出</td></tr>
+  <tr><td><code>Esc</code></td><td>退出当前模式</td></tr>
+  <tr><td><code>:</code></td><td>命令模式（输入 <code>but</code> 命令）</td></tr>
+  <tr><td><code>Ctrl+r</code></td><td>刷新 workspace 状态</td></tr>
+</table>
+
+<!-- ===== GitHub 集成 ===== -->
+<h2 id="github">GitHub 集成</h2>
+<h3>连接步骤</h3>
+<ol>
+  <li>点击左侧头像 → <strong>Settings</strong> → <strong>Integrations</strong></li>
+  <li>选择 <strong>Add account</strong> → <strong>GitHub</strong></li>
+  <li>推荐选择 <strong>Device Flow</strong>（自动生成授权码，在浏览器中完成授权）</li>
+  <li>也可以手动粘贴 Personal Access Token（需要 <code>repo</code> + <code>workflow</code> 权限）</li>
+</ol>
+
+<h3>创建 PR</h3>
+<p>连接后，每个 lane 底部会出现 <strong>"Create PR"</strong> 按钮。点击下方（最靠近 target branch 的）分支开始创建，GitButler 会自动向上设置每个 PR 的 base。</p>
+
+<h3>原生堆叠 PR（Stacked PRs）</h3>
+<p>在 <strong>Project Settings → Native GitHub stacked pull requests</strong> 中设置：</p>
+<ul>
+  <li><strong>Auto</strong>：仓库支持时使用原生堆叠，否则用描述信息（默认）</li>
+  <li><strong>Native</strong>：强制使用原生堆叠，不支持则报错</li>
+  <li><strong>Disabled</strong>：始终使用描述信息</li>
+</ul>
+
+<!-- ===== GitLab 集成 ===== -->
+<h2 id="gitlab">GitLab 集成</h2>
+<h3>前置条件</h3>
+<ul>
+  <li><strong>GitLab Personal Access Token</strong>：需要 <code>api</code> scope</li>
+  <li><strong>Project ID</strong>：在 GitLab 仓库页右上角三点菜单 → Copy project ID</li>
+</ul>
+
+<h3>配置步骤</h3>
+<ol>
+  <li>GitButler → Project Settings → 底部 GitLab 配置区域</li>
+  <li>填入 Token 和 Project ID（Token 安全存储在系统 Keychain 中）</li>
+  <li>如果是自托管 GitLab，填入 Instance URL</li>
+</ol>
+
+<div class="callout callout-warning">
+  <div class="callout-title">⚠️ 自托管 GitLab 注意</div>
+  <p>使用自定义 GitLab 实例时，可能需要在 GitButler 中添加自定义 CSP（内容安全策略）以允许连接到你的实例。详见官方 <a href="https://docs.gitbutler.com/troubleshooting/custom-csp" target="_blank">Custom CSP 文档</a>。</p>
+</div>
+
+<!-- ===== AI 辅助 ===== -->
+<h2 id="ai">AI 辅助功能</h2>
+<h3>支持的模型提供商</h3>
+<table>
+  <tr><th>提供商</th><th>类型</th><th>费用</th></tr>
+  <tr><td>OpenAI</td><td>云端 API</td><td>用自己的 key 或走 GitButler 代理（需登录）</td></tr>
+  <tr><td>Anthropic</td><td>云端 API</td><td>同上</td></tr>
+  <tr><td>Ollama</td><td>本地运行</td><td>免费，支持 Llama 3、Phi 3、Mistral 等开源模型</td></tr>
+  <tr><td>LM Studio</td><td>本地运行</td><td>免费</td></tr>
+</table>
+
+<h3>自定义 Prompt</h3>
+<p>在 Settings → AI 中可以自定义 prompt，支持以下变量：</p>
+<ul>
+  <li><code>%{emoji_style}</code> — 是否使用 GitMoji 前缀</li>
+  <li><code>%{brief_style}</code> — 限制一句话以内</li>
+  <li><code>%{diff}</code> — diff 内容</li>
+  <li><code>%{branch_name}</code> — 当前分支名</li>
+</ul>
+
+<!-- ===== 常见问题 ===== -->
+<h2 id="troubleshooting">常见问题</h2>
+
+<h3>Q1：我在 GitButler 里 commit 了，但 UI 没更新？</h3>
+<p>你可能用了 <code>git commit</code> 直接提交，跳过了 GitButler 的追踪。解决方法：</p>
+<pre><code># 1. 确认提交已在目标分支上
+git log --oneline &lt;branch-name&gt; -3
+
+# 2. 同步 GitButler 数据库（TOML + SQLite）
+sed -i '' 's/&lt;旧commit&gt;/&lt;新commit&gt;/' .git/gitbutler/virtual_branches.toml
+sqlite3 .git/gitbutler/but.sqlite \
+  "UPDATE vb_stack_heads SET head_sha='&lt;新commit&gt;' WHERE name='&lt;分支名&gt;';"
+
+# 3. 触发刷新
+echo $(pgrep -f gitbutler-tauri) &gt; .git/gitbutler/REFRESH</code></pre>
+<p><strong>根本解法</strong>：永远在 GitButler GUI 中点击 Commit 按钮，不要用 <code>git commit</code>。</p>
+
+<h3>Q2：Workspace 分支是什么？为什么 git log 里看到奇怪的 merge commit？</h3>
+<p><code>gitbutler/workspace</code> 是 GitButler 用来合并所有已应用分支状态的虚拟分支。当你同时 Apply 多个分支时，GitButler 会把它们的改动合并到这个分支，让 <code>git status</code> 输出看起来正常。这是预期行为，不要手动操作这个分支。</p>
+
+<h3>Q3：GitButler 卡住了 / 无法响应？</h3>
+<p>可能的原因和解决方法：</p>
+<ul>
+  <li><strong>SQLite 数据库锁</strong>：检查是否有多個 GitButler 进程在运行 <code>ps aux | grep gitbutler</code></li>
+  <li><strong>冲突未解决</strong>：进入 Edit Mode 解决冲突后再继续</li>
+  <li><strong>完全卡死</strong>：参考 <a href="https://docs.gitbutler.com/troubleshooting/fixing-conflicts-outside-gitbutler" target="_blank">官方修复指南</a> 进行手动恢复</li>
+</ul>
+
+<h3>Q4：如何在没有 GUI 的服务器上工作？</h3>
+<p>使用 <code>but tui</code> 命令：
+<pre><code>but setup          # 初始化
+but branch create &lt;name&gt;   # 创建分支
+but apply &lt;name&gt;           # 应用分支
+# ... 编辑文件 ...
+but commit         # 提交
+but push &lt;name&gt;  # 推送</code></pre>
+</p>
+
+<!-- ===== 黄金法则 ===== -->
+<h2 id="golden-rules">黄金法则（最重要）</h2>
+
+<div class="callout callout-danger">
+  <div class="callout-title">🚫 绝对不要做</div>
+  <p><strong>不要用 <code>git commit</code> 提交代码</strong>。GitButler 安装了 pre-commit hook 来阻止你，但如果绕过则会导致数据库不同步。</p>
+  <p><strong>不要用 <code>git checkout</code> 切换分支</strong>。这会让 GitButler 进入混乱状态。</p>
+</div>
+
+<div class="callout callout-success">
+  <div class="callout-title">✅ 推荐做法</div>
+  <p><strong>所有操作通过 GitButler GUI 或 <code>but</code> CLI 完成。</strong></p>
+  <p>可以用 <code>git log</code>、<code>git diff</code>、<code>git status</code> 查看状态，这些是安全的只读操作。</p>
+  <p>退出 GitButler 管理模式：<code>but teardown</code>，恢复后就可以正常用 git 了。</p>
+</div>
+
+<!-- ===== Butler Flow ===== -->
+<h2 id="butler-flow">Butler Flow 工作流</h2>
+<p>GitButler 推荐一种轻量级分支工作流（改进版 GitHub Flow）：</p>
+<ol>
+  <li><strong>所有工作基于 Target Branch</strong>（通常是 <code>main</code>）</li>
+  <li><strong>每个改动立即创建分支</strong>，即使是小改动</li>
+  <li><strong>尽早分享</strong>：分支创建后即可 Push，让同事 review</li>
+  <li><strong>本地集成测试</strong>：可以同时 Apply 多个接近合并的分支进行联调</li>
+  <li><strong>独立 review</strong>：每个分支单独 review 和合并</li>
+  <li><strong>自动清理</strong>：合并后虚拟分支自动消失，不产生垃圾</li>
+</ol>
+
+<!-- ===== 附录：命令速查表 ===== -->
+<h2 id="appendix">附录：命令速查表</h2>
+
+<h3>分支管理</h3>
+<pre><code># 创建虚拟分支
+but branch create &lt;name&gt;
+
+# 应用/卸载分支
+but apply &lt;name&gt;
+but unapply &lt;name&gt;
+
+# 列出所有分支
+but branch list
+
+# 删除虚拟分支
+but branch remove &lt;name&gt;</code></pre>
+
+<h3>Commit 操作</h3>
+<pre><code># 提交
+but commit -m "message"
+
+# 吸收改动到已有 commit
+but absorb &lt;commit-id&gt;
+
+# 重命名 commit message
+but reword &lt;commit-id&gt;
+
+# 撤销 commit（返回未提交状态）
+but uncommit &lt;commit-id&gt;
+
+# 合并两个 commit
+but squash &lt;src&gt; &lt;dst&gt;
+
+# 移动 commit 到另一分支
+but move &lt;commit-id&gt; --to &lt;branch&gt;</code></pre>
+
+<h3>推送与 PR</h3>
+<pre><code># 推送
+but push &lt;branch&gt;
+
+# 拉取并更新
+but pull
+
+# 创建 PR
+but pr --title "标题" --body "描述"
+
+# 直接合并到目标分支
+but land &lt;branch&gt;</code></pre>
+
+<h3>撤销与恢复</h3>
+<pre><code># 撤销上一步操作
+but undo
+
+# 重做
+but redo
+
+# 查看操作历史
+but oplog
+
+# 查看具体操作详情
+but oplog &lt;op-id&gt;</code></pre>
+
+<h3>系统管理</h3>
+<pre><code># 初始化仓库
+but setup
+
+# 退出 GitButler 模式
+but teardown
+
+# 清理空分支
+but clean
+
+# 强制更新（从上游 rebase）
+but update</code></pre>
+
+<div class="footer">
+  <p>本文档基于 <a href="https://docs.gitbutler.com/" target="_blank">GitButler 官方文档</a> 整理 · 最后更新 2025-09</p>
+  <p>原文链接：<a href="https://docs.gitbutler.com/" target="_blank">https://docs.gitbutler.com/</a></p>
+</div>
+
+</main>
+</div>
 </body>
 </html>
